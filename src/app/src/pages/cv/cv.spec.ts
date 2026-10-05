@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HASS } from './hass';
+import { CV } from './cv';
 
-describe('HASS', () => {
-  let component: HASS;
-  let fixture: ComponentFixture<HASS>;
+describe('CV', () => {
+  let component: CV;
+  let fixture: ComponentFixture<CV>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HASS],
+      imports: [CV],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HASS);
+    fixture = TestBed.createComponent(CV);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
