@@ -25,11 +25,14 @@
     color: @nav-color;
     font-size: 1.5rem;
     font-weight: bold;
+    white-space: nowrap;
     text-decoration: none;
   }
 
   .nav-links {
     .flex-center;
+    flex: 1;
+    justify-content: center;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -47,6 +50,38 @@
     }
   }
 
+  .social-links {
+    .flex-center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+    margin-left: auto;
+
+    a {
+      .flex-center;
+      color: @nav-color;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: @link-hover;
+      }
+
+      &:focus-visible {
+        outline: 2px solid @link-hover;
+        outline-offset: 4px;
+      }
+    }
+
+    svg {
+      display: block;
+      width: 1.4rem;
+      height: 1.4rem;
+      fill: currentColor;
+    }
+  }
+
   @media (max-width: @mobile-break) {
     .nav-container {
       flex-direction: column;
@@ -58,6 +93,10 @@
       gap: 0.75rem;
       width: 100%;
       text-align: center;
+    }
+
+    .social-links {
+      margin-left: 0;
     }
   }
 }

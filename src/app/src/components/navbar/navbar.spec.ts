@@ -31,4 +31,17 @@ describe('Navbar', () => {
       'NLP Projects',
     ]);
   });
+
+  it('should render accessible social links', () => {
+    const links = fixture.nativeElement.querySelectorAll('.social-links a');
+
+    expect(Array.from(links, (link: HTMLAnchorElement) => link.href)).toEqual([
+      'https://github.com/ianro04',
+      'https://linkedin.com/in/ian-rodriguez-264802a5',
+    ]);
+    expect(Array.from(links, (link: HTMLAnchorElement) => link.getAttribute('aria-label'))).toEqual([
+      'Visit my GitHub',
+      'Connect on LinkedIn',
+    ]);
+  });
 });
