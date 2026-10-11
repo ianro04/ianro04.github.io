@@ -14,8 +14,20 @@ export class CS implements OnInit {
 
   constructor(private GitHub: GithubService) {}
 
+  private formatRepoList(startList: GithubRepo[]) {
+    return startList.filter(r => !r.fork).map(r => ({ ...r, topics: r.topics?.length ? r.topics : ['None'] }));
+  }
+
   async ngOnInit(): Promise<void> {
     const resp = await firstValueFrom(this.GitHub.getUserRepos('ianro04'));
-    this.repos.set(resp.filter(r => !r.fork).map(r => ({ ...r, topics: r.topics?.length ? r.topics : ['None'] })));
+    this.repos.set(this.formatRepoList(resp));
+    const respExtras = await firstValueFrom(this.GitHub.getExtraRepos());
+    const settledExtraRepos = await Promise.allSettled(
+      respExtras.map(e => firstValueFrom(this.GitHub.getSpecificRepo(e.owner, e.repo)))
+    );
+    const extraRepos = settledExtraRepos
+      .filter((r): r is PromiseFulfilledResult<GithubRepo> => r.status === 'fulfilled')
+      .map(r => r.value);
+    this.repos.update(current => this.formatRepoList([...current, ...extraRepos]));
   }
 }

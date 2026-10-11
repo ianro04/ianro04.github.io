@@ -28,4 +28,12 @@ export class GithubService {
   getUserLanguages(owner: string, repo: string): Observable<Record<string, number>> {
     return this.http.get<Record<string, number>>(`${this.baseUrl}/repos/${owner}/${repo}/languages`)
   };
+
+  getSpecificRepo(owner: string, repo: string): Observable<GithubRepo> {
+    return this.http.get<GithubRepo>(`${this.baseUrl}/repos/${owner}/${repo}`)
+  }
+
+  getExtraRepos(): Observable<{owner: string, repo: string}[]> { // Repos I worked on that don't fall under my profile
+    return this.http.get<{ owner: string, repo: string }[]>('misc_repos.json');
+  }
 }
