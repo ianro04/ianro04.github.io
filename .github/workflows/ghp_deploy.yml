@@ -32,7 +32,10 @@ jobs:
           cache-dependency-path: package-lock.json
       
       - name: Build dependencies
-        run: npm ci && npx ng build
+        run: npm ci && npx ng build --base-href /portfolio/
+
+      - name: Add SPA fallback
+        run: cp dist/IR-Portfolio/browser/index.csr.html dist/IR-Portfolio/browser/404.html
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.9.0
