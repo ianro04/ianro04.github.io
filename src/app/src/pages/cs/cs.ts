@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GithubService } from '../../services/git-hub/git-hub';
 
 @Component({
   imports: [],
@@ -6,4 +7,13 @@ import { Component } from '@angular/core';
   styleUrl: './cs.less',
   templateUrl: './cs.html',
 })
-export class CS {}
+export class CS implements OnInit {
+  testList: any;
+
+  constructor(private GitHub: GithubService) {}
+
+  async ngOnInit(): Promise<void> {
+    let resp = await this.GitHub.getUserRepos('ianro04');
+    console.log(resp);
+  }
+}
