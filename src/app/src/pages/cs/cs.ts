@@ -1,9 +1,10 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-cs',
   styleUrl: './cs.less',
   templateUrl: './cs.html',
@@ -15,6 +16,6 @@ export class CS implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const resp = await firstValueFrom(this.GitHub.getUserRepos('ianro04'));
-    this.repos.set(resp.filter(r => !r.fork));
+    this.repos.set(resp.filter(r => !r.fork).map(r => ({ ...r, topics: r.topics?.length ? r.topics : ['None'] })));
   }
 }

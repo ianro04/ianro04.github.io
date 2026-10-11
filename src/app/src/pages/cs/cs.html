@@ -1,11 +1,18 @@
 <div class="repo-list">
     @for (repo of repos(); track repo.id) {
         <div class="repo">
-            <a [href]="repo.html_url" target=_blank>{{ repo.name }}</a>
+            <h2><a [href]="repo.html_url" target=_blank>{{ repo.name }}</a></h2>
+            @if (repo.topics) {
+                <span>
+                    <h4>Tags: {{ repo.topics ?? "None" }}</h4>
+                    @if (repo.topics.includes("nlp")) {
+                        <i>View the <a routerLink="/pages/nlp/">NLP projects page</a> for an interactive demo!</i>
+                    }
+                </span>
+            }
             <p>{{ repo.description ?? 'No description' }}</p>
             @if (repo.language) { <span> Language: {{ repo.language }} </span>}
-            @if (repo.topics) { <span> Tags: {{ repo.topics }} </span>}
-            @if (repo.pushed_at) { <span> Most Recent Update: {{ repo.pushed_at }} </span>}
+            @if (repo.pushed_at) { <span> Most Recent Update: {{ repo.pushed_at.substring(0,10) }} </span>}
         </div>
     }
 </div>
