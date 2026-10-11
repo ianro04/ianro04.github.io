@@ -15,7 +15,10 @@ export class CS implements OnInit {
   constructor(private GitHub: GithubService) {}
 
   private formatRepoList(startList: GithubRepo[]) {
-    return startList.filter(r => !r.fork).map(r => ({ ...r, topics: r.topics?.length ? r.topics : ['None'] }));
+    return startList
+    .filter(r => !r.fork)
+    .map(r => ({ ...r, topics: r.topics?.length ? r.topics : ['None'] }))
+    .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at)); // Most recently updated first
   }
 
   async ngOnInit(): Promise<void> {
