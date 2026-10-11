@@ -1,21 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { TestBed } from '@angular/core/testing';
 import { GithubService } from '../../services/git-hub/git-hub';
 
-describe('Github', () => {
-  let component: GithubService;
-  let fixture: ComponentFixture<GithubService>;
+describe('GithubService', () => {
+  let service: GithubService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [GithubService],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(GithubService);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [GithubService],
+    });
+    service = TestBed.inject(GithubService);
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 });
