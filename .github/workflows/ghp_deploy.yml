@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  run-vitest:
+    uses: ./.github/workflows/vitest.yml
+
+  deploy-gh-pages:
+    needs: run-vitest
+    if: ${{ !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+      
+      - name: Build dependencies
+        run: npm ci && npx ng build
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.9.0
+        with:
+          folder: dist/IR-Portfolio/browser
+
+      - name: Update Version Tag
+        uses: anothrNick/github-tag-action@1.75.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_PREFIX: v
+          MAJOR_STRING_TOKEN: "#Implement"
+          MINOR_STRING_TOKEN: "#Adjust"
+          PATCH_STRING_TOKEN: "#Fix"
+          NONE_STRING_TOKEN: "#Ignore"
+          DEFAULT_BUMP: patch
+          INITIAL_VERSION: 1.0.0
