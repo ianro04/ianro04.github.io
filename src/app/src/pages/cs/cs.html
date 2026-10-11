@@ -1,4 +1,11 @@
-<p>cs works!</p>
-@if (testList) {
-    <p>{{ testList }}</p>
-}
+<div class="repo-list">
+    @for (repo of repos(); track repo.id) {
+        <div class="repo">
+            <a [href]="repo.html_url" target=_blank>{{ repo.name }}</a>
+            <p>{{ repo.description ?? 'No description' }}</p>
+            @if (repo.language) { <span> Language: {{ repo.language }} </span>}
+            @if (repo.topics) { <span> Tags: {{ repo.topics }} </span>}
+            @if (repo.pushed_at) { <span> Most Recent Update: {{ repo.pushed_at }} </span>}
+        </div>
+    }
+</div>

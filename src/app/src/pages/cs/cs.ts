@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { GithubService } from '../../services/git-hub/git-hub';
+import { Component, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
 
 @Component({
   imports: [],
@@ -8,12 +9,12 @@ import { GithubService } from '../../services/git-hub/git-hub';
   templateUrl: './cs.html',
 })
 export class CS implements OnInit {
-  testList: any;
+  repos = signal<GithubRepo[]>([]);
 
   constructor(private GitHub: GithubService) {}
 
   async ngOnInit(): Promise<void> {
-    let resp = await this.GitHub.getUserRepos('ianro04');
-    console.log(resp);
+    const resp = await firstValueFrom(this.GitHub.getUserRepos('ianro04'));
+    this.repos.set(resp.filter(r => !r.fork));
   }
 }
