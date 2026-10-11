@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CV } from './cv';
+import * as fs from 'fs';
+import * as path from 'path';
 
 describe('CV', () => {
   let component: CV;
@@ -18,4 +20,10 @@ describe('CV', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have access to IR_CV.pdf', () => {
+    const cvPath = path.join(process.cwd(), 'public', 'IR_CV.pdf');
+    const fileExists = fs.existsSync(cvPath);
+    expect(fileExists).toBe(true);
+  })
 });

@@ -37,7 +37,7 @@ describe('Navbar', () => {
 
     expect(Array.from(links, (link: HTMLAnchorElement) => link.href)).toEqual([
       'https://github.com/ianro04',
-      'https://linkedin.com/in/ian-rodriguez-264802a5',
+      'https://www.linkedin.com/in/ian-rodriguez-2646802a5/',
     ]);
     expect(Array.from(links, (link: HTMLAnchorElement) => link.getAttribute('aria-label'))).toEqual([
       'Visit my GitHub',
