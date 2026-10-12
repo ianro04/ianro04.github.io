@@ -9,7 +9,7 @@ export interface GithubRepo {
   html_url: string;
   language: string | null;
   fork: boolean;
-  topics?: string[];
+  topics?: string | string[];
   pushed_at: string;
 }
 

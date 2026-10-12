@@ -17,7 +17,7 @@ export class CS implements OnInit {
   private formatRepoList(startList: GithubRepo[]) {
     return startList
     .filter(r => !r.fork)
-    .map(r => ({ ...r, topics: r.topics?.length ? r.topics : ['None'] }))
+    .map(r => ({ ...r, topics: r.topics?.length ? (Array.isArray(r.topics) ? r.topics.join(', ') : r.topics) : ['None'] }))
     .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at)); // Most recently updated first
   }
 
