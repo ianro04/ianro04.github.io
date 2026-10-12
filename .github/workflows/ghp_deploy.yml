@@ -41,6 +41,8 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.9.0
         with:
           folder: dist/IR-Portfolio/browser
+          git-config-name: 'github-actions[bot]'
+          git-config-email: 'github-actions[bot]@users.noreply.github.com'
 
       - name: Update Version Tag
         uses: anothrNick/github-tag-action@1.75.0
