@@ -32,7 +32,7 @@ jobs:
           cache-dependency-path: package-lock.json
       
       - name: Build dependencies
-        run: npm ci && npx ng build --base-href /portfolio/
+        run: npm ci && npx ng build --base-href /
 
       - name: Add SPA fallback
         run: cp dist/IR-Portfolio/browser/index.csr.html dist/IR-Portfolio/browser/404.html
