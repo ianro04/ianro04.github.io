@@ -2,7 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main] # Does not include GH Actions bot
+  workflow_call: # May be prompted by GH Actions bot
 concurrency:
   group: gh-pages-deploy
   cancel-in-progress: false
@@ -12,6 +13,7 @@ permissions:
 
 jobs:
   run-vitest:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/vitest.yml
 
   deploy-gh-pages:
@@ -22,6 +24,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Set up Node.js
