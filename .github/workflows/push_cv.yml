@@ -1,0 +1,37 @@
+name: Update IR_CV.pdf File
+
+on:
+  schedule:
+    - cron: '0 0 1 1 *' # Every new year at 00:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  push-cv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+  
+      - name: Download IR_CV.pdf
+        env:
+          CV_URL: ${{ secrets.CV_URL }}
+        run: |
+          PDF_URL=$(echo "${CV_URL}" | tr -d '\r' | sed -E "s#/edit.*#/export?format=pdf#")
+          curl -fL -o IR_CV.pdf "$PDF_URL"
+          head -c 4 IR_CV.pdf | grep -q "%PDF" || { echo "Downloaded file is not a valid PDF."; exit 1; }
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          mv IR_CV.pdf public/IR_CV.pdf
+          git add public/IR_CV.pdf
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "Update IR_CV.pdf (Automated, #Ignore)"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi

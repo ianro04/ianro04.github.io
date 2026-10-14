@@ -3,3 +3,6 @@
 *.html text=auto eol=lf
 *.json text=auto eol=lf
 *.txt text=auto eol=lf
+*.yml text=auto eol=lf
+*.yaml text=auto eol=lf
+*.md text=auto eol=lf
