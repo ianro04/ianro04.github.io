@@ -1,12 +1,211 @@
 .intro-text img {
-    float: left;
-    margin-right: 1rem;
-    margin-bottom: 2px;
+  float: left;
+  margin-right: 1rem;
+  margin-bottom: 2px;
 }
 
 .intro-text {
-    margin-top: 10px;
-    margin-bottom: 1px;
-    min-height: 100vh;
-    overflow: hidden;
+  margin-top: 10px;
+  margin-bottom: 1px;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.tagcloud-wrapper {
+  --tagcloud-transition-user-duration: 650ms;
+  --tagcloud-transition-user-ease: ease-in-out;
+  --tagcloud-transition-duration: 250ms;
+  --tagcloud-transition-ease: ease-out;
+  --tagcloud-bg-color-rgb: 26, 26, 26;
+  --tagcloud-animation-duration: 25s;
+  --tagcloud-animation-direction: normal;
+  --tagcloud-animation-play-state: running;
+  --tagcloud-diameter: min(32rem, calc(100vw - 2rem));
+  --tagcloud-controls-diameter: 100%;
+  --tagcloud-start-rotation: 54deg;
+  --tagcloud-control-bg-color: transparent;
+  --tagcloud-control-bg-hover-color: rgba(255, 255, 255, 0.08);
+  --tagcloud-control-bg-checked-color: rgba(255, 255, 255, 0.14);
+  --tag-diameter: clamp(3.2rem, 17vw, 5.5rem);
+  --tag-font-size: 0.9rem;
+  --_control-diameter: var(--tagcloud-controls-diameter);
+  --_control-radius: calc(var(--_control-diameter) / 2);
+  --_diameter: var(--tagcloud-diameter);
+  --_radius: calc((var(--_diameter) / 2) - (var(--tag-diameter) / 2));
+
+  position: relative;
+  display: block;
+  width: var(--_diameter);
+  aspect-ratio: 1;
+  margin: 2rem auto;
+  border-radius: 50%;
+  background-color: rgb(var(--tagcloud-bg-color-rgb));
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: var(--tag-font-size);
+  isolation: isolate;
+  touch-action: manipulation;
+
+  &:hover,
+  &:has(input:focus-visible) {
+    --tagcloud-animation-play-state: paused;
+  }
+
+  @media (max-width: 32rem) {
+    --tag-diameter: clamp(2.8rem, 17vw, 3.6rem);
+    --tag-font-size: 0.78rem;
+  }
+}
+
+.tagcloud-controls {
+  position: absolute;
+  inset: 0;
+  width: var(--_control-diameter);
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+  --current-rotation: var(--tagcloud-start-rotation);
+}
+
+.tagcloud-control-button {
+  --_width: var(--_control-radius);
+  --_height: calc(var(--_control-diameter) * 3.141592653589793 / var(--num-elements) + 1px);
+  --_theta-length: calc(2 * 3.141592653589793);
+  --_segment: calc(var(--index) / var(--num-elements) * var(--_theta-length));
+  --_x: calc(var(--_control-radius) * cos(var(--_segment)));
+  --_y: calc(var(--_control-radius) * sin(var(--_segment)) + var(--_control-radius) - var(--_height) / 2);
+  --_rotation: calc(var(--index) / var(--num-elements) * 360deg);
+
+  position: absolute;
+  top: var(--_y);
+  left: var(--_x);
+  z-index: 2;
+  width: var(--_width);
+  height: var(--_height);
+  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+  transform: rotate(var(--_rotation));
+  transform-origin: right center;
+  background-color: var(--tagcloud-control-bg-color);
+  transition: background-color var(--tagcloud-transition-duration) var(--tagcloud-transition-ease);
+
+  &:has(input:checked) {
+    background-color: var(--tagcloud-control-bg-checked-color);
+  }
+
+  &:has(input:hover) {
+    background-color: var(--tagcloud-control-bg-hover-color);
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid #fff;
+    outline-offset: -4px;
+  }
+
+  input {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    appearance: none;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.tagcloud-rotation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--_diameter);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    rgba(var(--tagcloud-bg-color-rgb), 0.75) 15%,
+    rgba(var(--tagcloud-bg-color-rgb), 0) calc(75% - var(--tag-diameter))
+  );
+  perspective: calc(var(--_diameter) * 2);
+  transform: translate(-50%, -50%) rotate(var(--current-rotation));
+  transform-style: preserve-3d;
+  transition: transform var(--tagcloud-transition-user-duration) var(--tagcloud-transition-user-ease);
+  pointer-events: none;
+}
+
+.tagcloud-tags {
+  position: absolute;
+  inset: 0;
+  width: var(--_diameter);
+  aspect-ratio: 1;
+  list-style: none;
+  transform-style: preserve-3d;
+  animation: tagcloud-rotation var(--tagcloud-animation-duration) var(--tagcloud-animation-direction) linear infinite var(--tagcloud-animation-play-state);
+}
+
+.tagcloud-tag {
+  --_phi: ~"acos(calc(-1 + (2 * var(--index)) / var(--num-elements)))";
+  --_theta: calc(~"sqrt(var(--num-elements) * 3.141592653589793)" * var(--_phi));
+  --_x: calc(cos(var(--_theta)) * sin(var(--_phi)));
+  --_y: calc(sin(var(--_theta)) * sin(var(--_phi)));
+  --_z: cos(var(--_phi));
+  --_vector-length: ~"sqrt(var(--_x) * var(--_x) + var(--_y) * var(--_y) + var(--_z) * var(--_z))";
+  --_normalized-x: calc(var(--_x) / var(--_vector-length));
+  --_normalized-y: calc(var(--_y) / var(--_vector-length));
+  --_normalized-z: calc(var(--_z) / var(--_vector-length));
+  --_scaled-x: calc(var(--_normalized-x) * var(--_radius));
+  --_scaled-y: calc(var(--_normalized-y) * var(--_radius));
+  --_scaled-z: calc(var(--_normalized-z) * var(--_radius));
+  --_final-x: calc(var(--_scaled-x) + var(--_radius));
+  --_final-y: calc(var(--_scaled-y) + var(--_radius));
+  --_final-z: var(--_scaled-z);
+
+  position: absolute;
+  display: flex;
+  width: var(--tag-diameter);
+  height: var(--tag-diameter);
+  align-items: center;
+  justify-content: center;
+  transform: translate3d(var(--_final-x), var(--_final-y), var(--_final-z));
+  animation: tagcloud-tag-rotation var(--tagcloud-animation-duration) var(--tagcloud-animation-direction) linear infinite var(--tagcloud-animation-play-state);
+}
+
+.tagcloud-tag div {
+  transform: rotateZ(calc(var(--current-rotation) * -1));
+  transition: transform var(--tagcloud-transition-user-duration) var(--tagcloud-transition-user-ease);
+  text-align: center;
+  text-shadow:
+    1px 1px 1px rgb(var(--tagcloud-bg-color-rgb)),
+    1px -1px 1px rgb(var(--tagcloud-bg-color-rgb)),
+    -1px 1px 1px rgb(var(--tagcloud-bg-color-rgb)),
+    -1px -1px 1px rgb(var(--tagcloud-bg-color-rgb)),
+    0 0 1rem rgb(var(--tagcloud-bg-color-rgb));
+}
+
+.tagcloud-tag span {
+  display: block;
+  max-width: var(--tag-diameter);
+  color: #ffd27a;
+  line-height: 1.2;
+}
+
+.tagcloud-tag.computer-science span {
+  color: #91d4ff;
+}
+
+@keyframes tagcloud-rotation {
+  from { transform: rotateX(0deg); }
+  to { transform: rotateX(360deg); }
+}
+
+@keyframes tagcloud-tag-rotation {
+  from { transform: translate3d(var(--_final-x), var(--_final-y), var(--_final-z)) rotateX(360deg); }
+  to { transform: translate3d(var(--_final-x), var(--_final-y), var(--_final-z)) rotateX(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tagcloud-tags,
+  .tagcloud-tag {
+    animation-play-state: paused;
+  }
+
+  .tagcloud-rotation,
+  .tagcloud-tag div {
+    transition-duration: 0ms;
+  }
 }
