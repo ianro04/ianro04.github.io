@@ -10,14 +10,14 @@ import { RouterLink } from '@angular/router';
 export class Home {
   wordCloud: {topic: string, isCS: boolean, link?: string}[] = [
     {topic: 'Natural Language Processing', isCS: true, link: "pages/nlp"},
-    {topic: 'Data Science', isCS: true},
-    {topic: 'Software Development', isCS: true},
+    {topic: 'Data Science', isCS: true, link: "pages/cs"},
+    {topic: 'Software Development', isCS: true, link: "pages/cs"},
     {topic: 'C++', isCS: true},
     {topic: 'Python', isCS: true},
     {topic: 'JavaScript', isCS: true},
     {topic: 'TypeScript', isCS: true},
     {topic: 'React', isCS: true},
-    {topic: 'Angular', isCS: true, link: "https://angular.dev/"},
+    {topic: 'Angular', isCS: true},
     {topic: 'GitHub Actions', isCS: true},
     {topic: 'Technical Writing', isCS: false},
     {topic: 'Art History', isCS: false},
