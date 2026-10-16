@@ -8,8 +8,8 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.html',
 })
 export class Home {
-  wordCloud: {topic: string, isCS: boolean}[] = [
-    {topic: 'Natural Language Processing', isCS: true},
+  wordCloud: {topic: string, isCS: boolean, link?: string}[] = [
+    {topic: 'Natural Language Processing', isCS: true, link: "pages/nlp"},
     {topic: 'Data Science', isCS: true},
     {topic: 'Software Development', isCS: true},
     {topic: 'C++', isCS: true},
@@ -17,7 +17,7 @@ export class Home {
     {topic: 'JavaScript', isCS: true},
     {topic: 'TypeScript', isCS: true},
     {topic: 'React', isCS: true},
-    {topic: 'Angular', isCS: true},
+    {topic: 'Angular', isCS: true, link: "https://angular.dev/"},
     {topic: 'GitHub Actions', isCS: true},
     {topic: 'Technical Writing', isCS: false},
     {topic: 'Art History', isCS: false},
@@ -29,5 +29,9 @@ export class Home {
 
   rotateTo(index: number): void {
     this.currentRotation = (54 + ((index + 1) * 360) / this.wordCloudLength) % 360;
+  }
+
+  isExternalLink(link: string): boolean {
+    return /^https?:\/\//.test(link);
   }
 }
