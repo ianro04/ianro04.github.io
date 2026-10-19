@@ -1,10 +1,16 @@
 [
     {
         "owner" : "techynoahb",
-        "repo" : "CS372FinalProject"
+        "repo" : "CS372FinalProject",
+        "extraTopics" : ["react", "nodejs", "mongodb", "javascript"]
     },
     {
         "owner" : "2025-Fall-UAF-CS493",
         "repo" : "yupik-command-line-programs"
+    },
+    {
+        "owner" : "techynoahb",
+        "repo" : "CS471_Mini-Project",
+        "extraTopics" : ["sqlite", "rfid", "python"]
     }
 ]

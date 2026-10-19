@@ -26,7 +26,14 @@ export class CS implements OnInit {
     this.repos.set(this.formatRepoList(resp));
     const respExtras = await firstValueFrom(this.GitHub.getExtraRepos());
     const settledExtraRepos = await Promise.allSettled(
-      respExtras.map(e => firstValueFrom(this.GitHub.getSpecificRepo(e.owner, e.repo)))
+      respExtras.map(async e => {
+        const repo = await firstValueFrom(this.GitHub.getSpecificRepo(e.owner, e.repo));
+        const extraTopics = (e as typeof e & { extraTopics?: string[] }).extraTopics;
+        if (extraTopics) {
+          repo.topics = repo.topics ? [...repo.topics, ...extraTopics] : extraTopics;
+        }
+        return repo;
+      })
     );
     const extraRepos = settledExtraRepos
       .filter((r): r is PromiseFulfilledResult<GithubRepo> => r.status === 'fulfilled')
