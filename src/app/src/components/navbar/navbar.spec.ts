@@ -27,8 +27,8 @@ describe('Navbar', () => {
     expect(Array.from(links, (link: HTMLAnchorElement) => link.textContent?.trim())).toEqual([
       'Home',
       'CV',
-      'Software & Data Science Projects',
-      'NLP Projects',
+      'Software Projects',
+      'NLP & Data Science Projects',
     ]);
   });
 
