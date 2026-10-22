@@ -11,6 +11,6 @@
     {
         "owner" : "techynoahb",
         "repo" : "CS471_Mini-Project",
-        "extraTopics" : ["sqlite", "rfid", "python"]
+        "extraTopics" : ["sqlite", "rfid"]
     }
 ]
