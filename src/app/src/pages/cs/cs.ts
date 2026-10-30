@@ -3,9 +3,9 @@ import { firstValueFrom } from 'rxjs';
 import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
 import { RouterLink } from '@angular/router';
 
-import {TuiAppearance, TuiIcon, TuiTitle} from '@taiga-ui/core';
-import {TuiBadge} from '@taiga-ui/kit';
-import {TuiCardMedium} from '@taiga-ui/layout';
+import { TuiAppearance, TuiIcon, TuiTitle } from '@taiga-ui/core';
+import { TuiBadge } from '@taiga-ui/kit';
+import { TuiCardMedium } from '@taiga-ui/layout';
 
 @Component({
   imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiIcon, TuiTitle],
@@ -22,7 +22,7 @@ export class CS implements OnInit {
   private formatRepoList(startList: GithubRepo[]) {
     return startList
     .filter(r => !r.fork)
-    .map(r => ({ ...r, topics: r.topics?.length ? (Array.isArray(r.topics) ? r.topics.join(', ') : r.topics) : ['None'] }))
+    .map(r => ({ ...r, topics: r.topics?.length ? (Array.isArray(r.topics) ? r.topics : Array.from(r.topics)) : ['No Topics Listed'] }))
     .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at)); // Most recently updated first
   }
 
