@@ -1,13 +1,18 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
 import { RouterLink } from '@angular/router';
 
+import {TuiAppearance, TuiIcon, TuiTitle} from '@taiga-ui/core';
+import {TuiBadge} from '@taiga-ui/kit';
+import {TuiCardMedium} from '@taiga-ui/layout';
+
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiIcon, TuiTitle],
   selector: 'app-cs',
   styleUrl: './cs.less',
   templateUrl: './cs.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CS implements OnInit {
   repos = signal<GithubRepo[]>([]);
