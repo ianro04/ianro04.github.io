@@ -7,7 +7,6 @@ You can visit the site [here](https://ianro04.github.io/).
 
 ## Dependencies Used
 
-- [Angular Material](https://material.angular.dev/)
 - [Cashew](https://www.npmjs.com/package/@ngneat/cashew)
 - [NGX Extended PDF Viewer](https://pdfviewer.net/extended-pdf-viewer/)
 - [Taiga UI](https://taiga-ui.dev/)
