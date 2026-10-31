@@ -1,7 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light;
+  --app-page-bg: #f3f5f7;
+  --app-surface: #ffffff;
+  --app-surface-raised: #ffffff;
+  --app-border: #d8dee8;
+  --app-text: #1f2937;
+  --app-muted: #566273;
+  --app-link: #315bd6;
+  --app-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  --app-shadow-hover: 0 6px 20px rgba(15, 23, 42, 0.14);
+  --app-switch-off: #b4d9de;
+  --app-switch-on: #1a5660;
+}
+
+body[tuiTheme='dark'] {
+  color-scheme: dark;
+  --app-page-bg: #141a22;
+  --app-surface: #1e2733;
+  --app-surface-raised: #253140;
+  --app-border: #394656;
+  --app-text: #e6edf5;
+  --app-muted: #b2bfce;
+  --app-link: #9cb7ff;
+  --app-shadow: 0 4px 14px rgba(0, 0, 0, 0.24);
+  --app-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.36);
+  --app-switch-off: #b4d9de;
+  --app-switch-on: #1a5660;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  color-scheme: light;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--app-page-bg);
+  color: var(--app-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.ui-mode-switch [tuiSwitch][data-appearance='secondary'] {
+  --tui-background-neutral-2: var(--app-switch-off);
+  --tui-background-neutral-2-hover: var(--app-switch-off);
+  --tui-background-neutral-2-pressed: var(--app-switch-off);
+}
+
+.ui-mode-switch [tuiSwitch][data-appearance='accent'] {
+  --tui-background-accent-2: var(--app-switch-on);
+  --tui-background-accent-2-hover: var(--app-switch-on);
+  --tui-background-accent-2-pressed: var(--app-switch-on);
 }

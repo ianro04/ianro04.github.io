@@ -6,7 +6,9 @@
                 @if (repo.topics) {
                     <div class="repoTopics">
                         @for (t of repo.topics; track t) {
-                            <div tuiBadge class="repoTopic">{{ t }}</div>
+                            @if (t !== "No Topics Listed") {
+                                <div tuiBadge class="repoTopic">{{ t }}</div>
+                            }
                         }
                     </div>
                 }
