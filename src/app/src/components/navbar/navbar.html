@@ -7,6 +7,16 @@
       <li><a routerLink="/pages/cs/">Software Projects</a></li>
       <li><a routerLink="/pages/nlp/">NLP & Data Science Projects</a></li>
     </ul>
+
+    <div class="ui-mode-switch">
+      <input
+        tuiSwitch type="checkbox"
+        [ngModel]="darkMode()"
+        (ngModelChange)="darkMode.set($event)"
+        aria-label="Dark Mode"
+      />
+    </div>
+    
     <ul class="social-links">
       <li>
         <a href="https://github.com/ianro04" target="_blank" rel="noopener noreferrer" aria-label="Visit my GitHub" title="GitHub">
