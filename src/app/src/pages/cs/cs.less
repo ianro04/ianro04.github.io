@@ -1,33 +1,40 @@
 @bg: #222;
-@card-bg: #e9eaec;
 @border: #e2e2e6;
+@card-bg: #e9eaec;
+@grid-gap: 1.25rem;
 @text-dark: #222;
 @text-muted: #666;
 @accent: #4a6cf7;
 @radius: 12px;
 @shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 
+@card-badge-topic: #eba524;
+@card-badge-lang: #3bc256;
+@card-badge-pushed: #9521d4;
+
 .repo-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 2rem 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: @grid-gap;
+    padding: 2rem 1rem;
     background: @bg;
-    align-items: center;
+    justify-items: center;
 }
 
-// Add each new project container here and in @media for consistency
 .repo {
     width: 100%;
+    height: 95%;
     max-width: 1100px;
+    box-sizing: border-box;
     background: @card-bg;
     border: 1px solid @border;
     border-radius: @radius;
     box-shadow: @shadow;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 
     transition: box-shadow 0.25s ease, transform 0.25s ease;
 
@@ -69,6 +76,35 @@
 
 }
 
+.repo-header, .repo-footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+
+    h2 {
+        margin: 0;
+    }
+}
+
+.repoTopics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.repoLang {
+    background: @card-badge-lang;
+}
+
+.repoLatest {
+    background: @card-badge-pushed;
+}
+
+.repoTopic {
+    background: @card-badge-topic;
+}
+
 // Animation
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -82,6 +118,10 @@
 }
 
 @media (max-width: 600px) {
+    .repo-list {
+        grid-template-columns: 1fr;
+    }
+
     .repo {
         padding: 1.2rem;
 

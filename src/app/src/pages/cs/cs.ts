@@ -3,12 +3,12 @@ import { firstValueFrom } from 'rxjs';
 import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
 import { RouterLink } from '@angular/router';
 
-import { TuiAppearance, TuiIcon, TuiTitle } from '@taiga-ui/core';
+import { TuiAppearance, TuiTitle } from '@taiga-ui/core';
 import { TuiBadge } from '@taiga-ui/kit';
 import { TuiCardMedium } from '@taiga-ui/layout';
 
 @Component({
-  imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiIcon, TuiTitle],
+  imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiTitle],
   selector: 'app-cs',
   styleUrl: './cs.less',
   templateUrl: './cs.html',

@@ -1,12 +1,29 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { provideRouter } from '@angular/router';
+import { provideTaiga } from '@taiga-ui/core';
 
 describe('App', () => {
   beforeEach(async () => {
+    if (typeof window.matchMedia !== 'function') {
+      Object.defineProperty(window, 'matchMedia', {
+        configurable: true,
+        value: (media: string): MediaQueryList => ({
+          matches: false,
+          media,
+          onchange: null,
+          addListener: () => {},
+          removeListener: () => {},
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          dispatchEvent: () => false,
+        }),
+      });
+    }
+
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [ provideRouter([]) ]
+      providers: [ provideRouter([]), provideTaiga() ]
     })
       .compileComponents();
   });
