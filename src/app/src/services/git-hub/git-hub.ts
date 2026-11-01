@@ -6,6 +6,9 @@ import { withCache } from '@ngneat/cashew';
 
 const HOUR = 60 * 60 * 1000;
 
+const cached = () =>
+  withCache({ ttl: HOUR, storage: 'localStorage', version: 'v1' });
+
 export interface GithubRepo {
   id: number;
   name: string;
@@ -27,18 +30,18 @@ export class GithubService {
 
   getUserRepos(username: string): Observable<GithubRepo[]> {
     return this.http.get<GithubRepo[]>(`${this.baseUrl}/users/${username}/repos`, {
-      params: { per_page : 100, sort: 'updated' }, context: withCache({ ttl: HOUR })
+      params: { per_page : 100, sort: 'updated' }, context: cached()
     });
   }
 
   getUserLanguages(owner: string, repo: string): Observable<Record<string, number>> {
     return this.http.get<Record<string, number>>(`${this.baseUrl}/repos/${owner}/${repo}/languages`,
-      { context: withCache({ ttl: HOUR }) }
+      { context: cached() }
     );
   }
 
   getSpecificRepo(owner: string, repo: string): Observable<GithubRepo> {
-    return this.http.get<GithubRepo>(`${this.baseUrl}/repos/${owner}/${repo}`, { context: withCache({ ttl: HOUR }) });
+    return this.http.get<GithubRepo>(`${this.baseUrl}/repos/${owner}/${repo}`, { context: cached() });
   }
 
   getExtraRepos(): Observable<{owner: string, repo: string}[]> { // Repos I worked on that don't fall under my profile

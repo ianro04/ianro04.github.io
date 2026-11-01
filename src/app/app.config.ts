@@ -3,14 +3,16 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpCache, withHttpCacheInterceptor, withLocalStorage } from '@ngneat/cashew';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    provideClientHydration(),
-    provideHttpClient(),
-    provideTaiga(),
-  ],
+      provideBrowserGlobalErrorListeners(),
+      provideRouter(routes),
+      provideClientHydration(),
+      provideHttpClient(withInterceptors([withHttpCacheInterceptor()])),
+      provideHttpCache(withLocalStorage()),
+      provideTaiga(),
+  ]
 };

@@ -1,4 +1,5 @@
 import { DOCUMENT } from '@angular/common';
+import { WA_ANIMATION_FRAME } from '@ng-web-apis/common';
 import {
   ApplicationConfig,
   inject,
@@ -6,12 +7,14 @@ import {
   provideEnvironmentInitializer,
 } from '@angular/core';
 import { provideServerRendering, withRoutes } from '@angular/ssr';
+import { EMPTY } from 'rxjs';
 import { appConfig } from './app.config';
 import { serverRoutes } from './app.routes.server';
 
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(withRoutes(serverRoutes)),
+    { provide: WA_ANIMATION_FRAME, useValue: EMPTY },
     provideEnvironmentInitializer(() => {
       const view = inject(DOCUMENT).defaultView;
 
