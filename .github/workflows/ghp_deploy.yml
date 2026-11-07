@@ -40,6 +40,9 @@ jobs:
       - name: Add SPA fallback
         run: cp dist/IR-Portfolio/browser/index.csr.html dist/IR-Portfolio/browser/404.html
 
+      - name: Add package licenses
+        run: cp dist/IR-Portfolio/3rdpartylicenses.txt dist/IR-Portfolio/browser/3rdpartylicenses.txt
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.9.0
         with:
