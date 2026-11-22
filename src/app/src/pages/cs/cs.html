@@ -1,5 +1,11 @@
+@if (activeFilter(); as filter) {
+    <div class="filter-controls">
+        <p>Showing projects tagged <strong>{{ filter }}</strong></p>
+        <button type="button" (click)="clearFilter()">Show all CS projects</button>
+    </div>
+}
 <div class="repo-list">
-    @for (repo of repos(); track repo.id) {
+    @for (repo of filteredRepos(); track repo.id) {
         <div tuiCardMedium class="repo">
             <div class="repo-header">
                 <h2 tuiTitle><a [href]="repo.html_url" target=_blank>{{ repo.name }}</a></h2>
@@ -29,5 +35,9 @@
                 @if (repo.pushed_at) { <div tuiBadge class="repoLatest"> Most Recent Update: {{ repo.pushed_at.substring(0,10) }} </div>}
             </div>
         </div>
+    } @empty {
+        @if (activeFilter(); as filter) {
+            <p class="empty-state">No projects found with the "{{ filter }}" tag.</p>
+        }
     }
 </div>

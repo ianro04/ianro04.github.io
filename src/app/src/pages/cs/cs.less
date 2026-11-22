@@ -5,6 +5,36 @@
 @card-badge-lang: #3bc256;
 @card-badge-pushed: #9521d4;
 
+.filter-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--app-page-bg);
+    color: var(--app-text);
+
+    p {
+        margin: 0;
+    }
+
+    button {
+        padding: 0.6rem 1rem;
+        border: 1px solid var(--app-border);
+        border-radius: 6px;
+        background: var(--app-surface);
+        color: var(--app-link);
+        cursor: pointer;
+    }
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    color: var(--app-muted);
+    text-align: center;
+}
+
 .repo-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -43,7 +43,7 @@
                       <a [href]="word.link" target="_blank" rel="noopener noreferrer"><span>{{ word.topic }}</span></a>
                     }
                     @else {
-                      <a [routerLink]="'/' + word.link"><span>{{ word.topic }}</span></a>
+                      <a [routerLink]="'/' + word.link" [queryParams]="word.queryParams"><span>{{ word.topic }}</span></a>
                     }
                   }
                   @else {

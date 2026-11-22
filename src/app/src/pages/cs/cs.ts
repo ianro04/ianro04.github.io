@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
 import { RouterLink } from '@angular/router';
 
@@ -16,8 +18,33 @@ import { TuiCardMedium } from '@taiga-ui/layout';
 })
 export class CS implements OnInit {
   repos = signal<GithubRepo[]>([]);
+  private filter = signal<string | null>(null);
+  activeFilter = computed(() => this.filter()?.trim().toLowerCase() || null);
+  filteredRepos = computed(() => {
+    const filter = this.activeFilter();
+    if (!filter) {
+      return this.repos();
+    }
 
-  constructor(private GitHub: GithubService) {}
+    return this.repos().filter(repo =>
+      Array.isArray(repo.topics) && repo.topics.some(topic => topic.toLowerCase() === filter)
+    );
+  });
+
+  constructor(
+    private GitHub: GithubService,
+    private route: ActivatedRoute,
+    private router: Router,
+    destroyRef: DestroyRef
+  ) {
+    this.route.queryParamMap
+      .pipe(takeUntilDestroyed(destroyRef))
+      .subscribe(params => this.filter.set(params.get('filter')));
+  }
+
+  clearFilter(): Promise<boolean> {
+    return this.router.navigateByUrl('/pages/cs');
+  }
 
   private formatRepoList(startList: GithubRepo[]) {
     return startList
