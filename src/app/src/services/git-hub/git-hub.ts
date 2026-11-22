@@ -16,8 +16,14 @@ export interface GithubRepo {
   html_url: string;
   language: string | null;
   fork: boolean;
-  topics?: string | string[];
+  topics?: string[] | null;
   pushed_at: string;
+}
+
+export interface ExtraGithubRepo {
+  owner: string;
+  repo: string;
+  extraTopics?: string[];
 }
 
 @Injectable({
@@ -44,7 +50,7 @@ export class GithubService {
     return this.http.get<GithubRepo>(`${this.baseUrl}/repos/${owner}/${repo}`, { context: cached() });
   }
 
-  getExtraRepos(): Observable<{owner: string, repo: string}[]> { // Repos I worked on that don't fall under my profile
-    return this.http.get<{ owner: string, repo: string }[]>('misc_repos.json');
+  getExtraRepos(): Observable<ExtraGithubRepo[]> {
+    return this.http.get<ExtraGithubRepo[]>('misc_repos.json');
   }
 }

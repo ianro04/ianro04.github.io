@@ -1,13 +1,23 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { GithubService, GithubRepo } from '../../services/git-hub/git-hub';
-import { RouterLink } from '@angular/router';
+import { FilterQL, type Schema } from 'filterql';
 
 import { TuiAppearance, TuiTitle } from '@taiga-ui/core';
 import { TuiBadge } from '@taiga-ui/kit';
 import { TuiCardMedium } from '@taiga-ui/layout';
+
+import { GithubRepo, GithubService } from '../../services/git-hub/git-hub';
+
+type DisplayGithubRepo = Omit<GithubRepo, 'topics'> & { topics: string[] };
+
+const repoFilterSchema: Schema = {
+  topics: { type: 'string' },
+};
+
+const quoteFilterValue = (value: string): string =>
+  `"${value.replace(/"/g, '\\"')}"`;
 
 @Component({
   imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiTitle],
@@ -17,18 +27,27 @@ import { TuiCardMedium } from '@taiga-ui/layout';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CS implements OnInit {
-  repos = signal<GithubRepo[]>([]);
+  repos = signal<DisplayGithubRepo[]>([]);
   private filter = signal<string | null>(null);
+  private filterql = new FilterQL({ schema: repoFilterSchema });
   activeFilter = computed(() => this.filter()?.trim().toLowerCase() || null);
   filteredRepos = computed(() => {
     const filter = this.activeFilter();
+    const repos = this.repos();
     if (!filter) {
-      return this.repos();
+      return repos;
     }
 
-    return this.repos().filter(repo =>
-      Array.isArray(repo.topics) && repo.topics.some(topic => topic.toLowerCase() === filter)
+    const searchableRepos = repos.map((repo, index) => ({
+      index,
+      topics: `|${repo.topics.join('|')}|`,
+    }));
+    const query = `topics i*= ${quoteFilterValue(`|${filter}|`)}`;
+    const matchingIndices = new Set(
+      this.filterql.query(searchableRepos, query).map(repo => repo.index)
     );
+
+    return repos.filter((_, index) => matchingIndices.has(index));
   });
 
   constructor(
@@ -46,30 +65,36 @@ export class CS implements OnInit {
     return this.router.navigateByUrl('/pages/cs');
   }
 
-  private formatRepoList(startList: GithubRepo[]) {
+  private formatRepoList(startList: GithubRepo[]): DisplayGithubRepo[] {
     return startList
-    .filter(r => !r.fork)
-    .map(r => ({ ...r, topics: r.topics?.length ? (Array.isArray(r.topics) ? r.topics : Array.from(r.topics)) : ['No Topics Listed'] }))
-    .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at)); // Most recently updated first
+      .filter(repo => !repo.fork)
+      .map(repo => ({
+        ...repo,
+        topics: repo.topics?.length ? repo.topics : ['No Topics Listed'],
+      }))
+      .sort((a, b) => b.pushed_at.localeCompare(a.pushed_at));
   }
 
   async ngOnInit(): Promise<void> {
     const resp = await firstValueFrom(this.GitHub.getUserRepos('ianro04'));
     this.repos.set(this.formatRepoList(resp));
+
     const respExtras = await firstValueFrom(this.GitHub.getExtraRepos());
     const settledExtraRepos = await Promise.allSettled(
-      respExtras.map(async e => {
-        const repo = await firstValueFrom(this.GitHub.getSpecificRepo(e.owner, e.repo));
-        const extraTopics = (e as typeof e & { extraTopics?: string[] }).extraTopics;
-        if (extraTopics) {
-          repo.topics = repo.topics ? [...repo.topics, ...extraTopics] : extraTopics;
+      respExtras.map(async extraRepo => {
+        const repo = await firstValueFrom(
+          this.GitHub.getSpecificRepo(extraRepo.owner, extraRepo.repo)
+        );
+        if (extraRepo.extraTopics) {
+          repo.topics = [...(repo.topics ?? []), ...extraRepo.extraTopics];
         }
         return repo;
       })
     );
     const extraRepos = settledExtraRepos
-      .filter((r): r is PromiseFulfilledResult<GithubRepo> => r.status === 'fulfilled')
-      .map(r => r.value);
+      .filter((result): result is PromiseFulfilledResult<GithubRepo> => result.status === 'fulfilled')
+      .map(result => result.value);
+
     this.repos.update(current => this.formatRepoList([...current, ...extraRepos]));
   }
 }
