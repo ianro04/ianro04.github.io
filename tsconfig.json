@@ -3,10 +3,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "esModuleInterop": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,

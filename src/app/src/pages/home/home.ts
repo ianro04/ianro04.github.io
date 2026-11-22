@@ -1,5 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import WordCloudData from '../../../../../public/word_cloud.json';
+
+interface WordCloudItem {
+  topic: string;
+  isCS: boolean;
+  link?: string;
+  queryParams?: Record<string, string>;
+}
 
 @Component({
   imports: [RouterLink],
@@ -8,22 +16,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.html',
 })
 export class Home {
-  wordCloud: {topic: string, isCS: boolean, link?: string, queryParams?: Record<string, string>}[] = [
-    {topic: 'Natural Language Processing', isCS: true, link: "pages/nlp"},
-    {topic: 'Data Science', isCS: true, link: "pages/nlp"},
-    {topic: 'Software Development', isCS: true, link: "pages/cs"},
-    {topic: 'C++', isCS: true},
-    {topic: 'Python', isCS: true, link: "pages/cs", queryParams: {filter: "python"}},
-    {topic: 'JavaScript', isCS: true},
-    {topic: 'TypeScript', isCS: true},
-    {topic: 'React', isCS: true, link: "pages/cs", queryParams: {filter: "react"}},
-    {topic: 'Angular', isCS: true},
-    {topic: 'GitHub Actions', isCS: true},
-    {topic: 'Technical Writing', isCS: false},
-    {topic: 'Art History', isCS: false},
-    {topic: 'Linguistics', isCS: false},
-    {topic: 'AWS', isCS: true}
-  ];
+  wordCloud: WordCloudItem[] = WordCloudData;
   wordCloudLength: number = this.wordCloud.length;
   currentRotation: number = 54;
 
