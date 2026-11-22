@@ -13,7 +13,9 @@
                     <div class="repoTopics">
                         @for (t of repo.topics; track t) {
                             @if (t !== "No Topics Listed") {
-                                <div tuiBadge class="repoTopic">{{ t }}</div>
+                                <a href="{{ getTagLink(t) }}" target="_self">
+                                    <div tuiBadge class="repoTopic">{{ t }}</div>
+                                </a>
                             }
                         }
                     </div>
@@ -31,7 +33,11 @@
             }
             <span tuiSubtitle>{{ repo.description ?? 'No description' }}</span>
             <div class="repo-footer">
-                @if (repo.language) { <div tuiBadge class="repoLang"> Language: {{ repo.language }} </div>}
+                @if (repo.language) {
+                    <a href="{{ getTagLink(repo.language) }}" target="_self">
+                        <div tuiBadge class="repoLang"> Language: {{ repo.language }} </div>
+                    </a>
+                }
                 @if (repo.pushed_at) { <div tuiBadge class="repoLatest"> Most Recent Update: {{ repo.pushed_at.substring(0,10) }} </div>}
             </div>
         </div>

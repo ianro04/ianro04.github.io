@@ -99,4 +99,8 @@ export class CS implements OnInit {
 
     this.repos.update(current => this.formatRepoList([...current, ...extraRepos]));
   }
+
+  getTagLink(tag: string): string {
+    return `/pages/cs?filter=${encodeURIComponent(tag.toLowerCase())}`;
+  }
 }
