@@ -13,6 +13,7 @@ import { GithubRepo, GithubService } from '../../services/git-hub/git-hub';
 type DisplayGithubRepo = Omit<GithubRepo, 'topics'> & { topics: string[] };
 
 const repoFilterSchema: Schema = {
+  language: { type: 'string' },
   topics: { type: 'string' },
 };
 
@@ -40,9 +41,10 @@ export class CS implements OnInit {
 
     const searchableRepos = repos.map((repo, index) => ({
       index,
+      language: repo.language ?? '',
       topics: `|${repo.topics.join('|')}|`,
     }));
-    const query = `topics i*= ${quoteFilterValue(`|${filter}|`)}`;
+    const query = `(language i== ${quoteFilterValue(filter)} || topics i*= ${quoteFilterValue(`|${filter}|`)})`;
     const matchingIndices = new Set(
       this.filterql.query(searchableRepos, query).map(repo => repo.index)
     );

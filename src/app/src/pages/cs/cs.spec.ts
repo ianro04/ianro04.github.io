@@ -76,4 +76,44 @@ describe('CS', () => {
 
     expect(TestBed.inject(Router).url).toBe('/pages/cs');
   });
+
+  it('should filter for specific languages', async () => {
+    const harness = await RouterTestingHarness.create();
+    const routedComponent = await harness.navigateByUrl('/pages/cs?filter=python', CS);
+    routedComponent.repos.set([
+      {
+        id: 1,
+        name: 'Python language project',
+        description: null,
+        html_url: 'https://example.com/python',
+        language: 'Python',
+        fork: false,
+        topics: [],
+        pushed_at: '2026-01-01',
+      },
+      {
+        id: 2,
+        name: 'Python topic project',
+        description: null,
+        html_url: 'https://example.com/python-topic',
+        language: 'JavaScript',
+        fork: false,
+        topics: ['python'],
+        pushed_at: '2026-01-01',
+      },
+      {
+        id: 3,
+        name: 'Unrelated project',
+        description: null,
+        html_url: 'https://example.com/unrelated',
+        language: 'JavaScript',
+        fork: false,
+        topics: ['web'],
+        pushed_at: '2026-01-01',
+      },
+    ]);
+    harness.detectChanges();
+
+    expect(harness.routeNativeElement?.querySelectorAll('.repo').length).toBe(2);
+  });
 });

@@ -13,7 +13,7 @@ export class Home {
     {topic: 'Data Science', isCS: true, link: "pages/nlp"},
     {topic: 'Software Development', isCS: true, link: "pages/cs"},
     {topic: 'C++', isCS: true},
-    {topic: 'Python', isCS: true},
+    {topic: 'Python', isCS: true, link: "pages/cs", queryParams: {filter: "python"}},
     {topic: 'JavaScript', isCS: true},
     {topic: 'TypeScript', isCS: true},
     {topic: 'React', isCS: true, link: "pages/cs", queryParams: {filter: "react"}},
