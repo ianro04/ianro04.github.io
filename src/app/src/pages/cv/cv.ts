@@ -5,8 +5,14 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 @Component({
   imports: [NgxExtendedPdfViewerModule],
   selector: 'app-cv',
-  styleUrl: './cv.less',
   templateUrl: './cv.html',
+  styles: `
+    :host {
+      display: block;
+      flex: 1;
+      background-color: var(--app-page-bg);
+    }
+  `
 })
 export class CV {
   private readonly darkMode = inject(TUI_DARK_MODE);
