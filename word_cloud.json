@@ -1,0 +1,47 @@
+[
+    {
+        "topic": "Natural Language Processing", "isCS": true, "link": "pages/nlp"
+    },
+    {
+        "topic": "Data Science", "isCS": true, "link": "pages/nlp"
+    },
+    {
+        "topic": "Software Development", "isCS": true, "link": "pages/cs"
+    },
+    {
+        "topic": "C++", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "c++"}
+    },
+    {
+        "topic": "Python", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "python"}
+    },
+    {
+        "topic": "Jupyter Notebooks", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "jupyter notebook"}
+    },
+    {
+        "topic": "JavaScript", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "javascript"}
+    },
+    {
+        "topic": "TypeScript", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "typescript"}
+    },
+    {
+        "topic": "React", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "react"}
+    },
+    {
+        "topic": "Angular", "isCS": true, "link": "pages/cs", "queryParams": {"filter": "angular"}
+    },
+    {
+        "topic": "GitHub Actions", "isCS": true
+    },
+    {
+        "topic": "Technical Writing", "isCS": false
+    },
+    {
+        "topic": "Art History", "isCS": false
+    },
+    {
+        "topic": "Linguistics", "isCS": false
+    },
+    {
+        "topic": "AWS", "isCS": true
+    }
+]

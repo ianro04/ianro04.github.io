@@ -3,7 +3,7 @@
         "project" : "ScandiProb",
         "space" : "https://ianro04-scandiprob.hf.space",
         "completionMonth" : "2026-04",
-        "description" : "A hybrid language identification multilabel text classifier for Norwegian, Swedish, and Danish, achieved by fine-tuning the ScandiBERT language model with regex post-processing. April 2026.",
+        "description" : "A hybrid language identification multilabel text classifier for Norwegian, Swedish, and Danish, achieved by fine-tuning the ScandiBERT language model with regex post-processing. April 2026, with QoL updates in November 2026.",
         "extraLinks" : [
             {
                 "name" : "GitHub",
@@ -19,7 +19,7 @@
         "project" : "PentaGemma",
         "space" : "https://ianro04-pentagemma.hf.space",
         "completionMonth" : "2026-05",
-        "description" : "A fine-tuned version of Gemma 4 E2B IT (a small, open-weights language model by Google) dedicated to summarizing text in exactly five sentences; also still functional as a chatbot. May 2026.",
+        "description" : "A fine-tuned version of Gemma 4 E2B IT (a small, open-weights language model by Google) dedicated to summarizing text in exactly five sentences; also still functional as a chatbot. May 2026, with QoL updates in November 2026.",
         "extraLinks" : [
             {
                 "name" : "GitHub",
