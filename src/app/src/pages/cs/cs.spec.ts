@@ -67,6 +67,7 @@ describe('CS', () => {
       },
     ]);
     harness.detectChanges();
+    await harness.fixture.whenStable();
 
     expect(harness.routeNativeElement?.querySelectorAll('.repo').length).toBe(1);
     expect(harness.routeNativeElement?.querySelector('.filter-controls')?.textContent).toContain('react');
@@ -98,11 +99,31 @@ describe('CS', () => {
         html_url: 'https://example.com/python-topic',
         language: 'JavaScript',
         fork: false,
-        topics: ['python'],
+        topics: ['PyThOn'],
         pushed_at: '2026-01-01',
       },
       {
         id: 3,
+        name: 'Jupyter language project',
+        description: null,
+        html_url: 'https://example.com/jupyter',
+        language: 'Jupyter Notebook',
+        fork: false,
+        topics: [],
+        pushed_at: '2026-01-01',
+      },
+      {
+        id: 4,
+        name: 'Similar topic project',
+        description: null,
+        html_url: 'https://example.com/python-tools',
+        language: 'JavaScript',
+        fork: false,
+        topics: ['python-tools'],
+        pushed_at: '2026-01-01',
+      },
+      {
+        id: 5,
         name: 'Unrelated project',
         description: null,
         html_url: 'https://example.com/unrelated',
@@ -113,7 +134,14 @@ describe('CS', () => {
       },
     ]);
     harness.detectChanges();
+    await harness.fixture.whenStable();
 
-    expect(harness.routeNativeElement?.querySelectorAll('.repo').length).toBe(2);
+    expect(harness.routeNativeElement?.querySelectorAll('.repo').length).toBe(3);
+
+    await TestBed.inject(Router).navigateByUrl('/pages/cs?filter=missing');
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(harness.routeNativeElement?.querySelectorAll('.repo').length).toBe(0);
   });
 });

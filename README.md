@@ -8,6 +8,6 @@ You can visit the site [here](https://ianro04.github.io/).
 ## Dependencies Used
 
 - [Cashew](https://www.npmjs.com/package/@ngneat/cashew)
-- [FilterQL](https://www.npmjs.com/package/filterql)
+- [JSONata](https://www.npmjs.com/package/jsonata)
 - [NGX Extended PDF Viewer](https://pdfviewer.net/extended-pdf-viewer/)
 - [Taiga UI](https://taiga-ui.dev/)

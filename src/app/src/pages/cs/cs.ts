@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, OnInit, resource, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FilterQL, type Schema } from 'filterql';
+import jsonata from 'jsonata';
 
 import { TuiAppearance, TuiTitle } from '@taiga-ui/core';
 import { TuiBadge } from '@taiga-ui/kit';
@@ -12,13 +12,21 @@ import { GithubRepo, GithubService } from '../../services/git-hub/git-hub';
 
 type DisplayGithubRepo = Omit<GithubRepo, 'topics'> & { topics: string[] };
 
-const repoFilterSchema: Schema = {
-  language: { type: 'string' },
-  topics: { type: 'string' },
-};
-
-const quoteFilterValue = (value: string): string =>
-  `"${value.replace(/"/g, '\\"')}"`;
+const repoFilter = jsonata(`$filter($, function($repo) {
+  (
+    $lowercase($repo.language ? $repo.language : '') = $filterValue
+    or (
+      $filterValue = 'python'
+      and $lowercase($repo.language ? $repo.language : '') = 'jupyter notebook'
+    )
+  )
+  or $count(
+    $filter(
+      $repo.topics ? $repo.topics : [],
+      function($topic) { $lowercase($topic) = $filterValue }
+    )
+  ) > 0
+})`);
 
 @Component({
   imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiTitle],
@@ -30,28 +38,26 @@ const quoteFilterValue = (value: string): string =>
 export class CS implements OnInit {
   repos = signal<DisplayGithubRepo[]>([]);
   private filter = signal<string | null>(null);
-  private filterql = new FilterQL({ schema: repoFilterSchema });
   activeFilter = computed(() => this.filter()?.trim().toLowerCase() || null);
-  filteredRepos = computed(() => {
-    const filter = this.activeFilter();
-    const repos = this.repos();
-    if (!filter) {
-      return repos;
-    }
+  filteredRepos = resource({
+    params: () => ({ repos: this.repos(), filter: this.activeFilter() }),
+    defaultValue: [] as DisplayGithubRepo[],
+    loader: async ({ params }) => {
+      if (!params.filter) {
+        return params.repos;
+      }
 
-    const searchableRepos = repos.map((repo, index) => ({
-      index,
-      language: repo.language ?? '',
-      topics: `|${repo.topics.join('|')}|`,
-    }));
-    const query = quoteFilterValue(filter) === '"python"'
-      ? `(language i== ${quoteFilterValue(filter)} || language i== ${quoteFilterValue('jupyter notebook')} || topics i*= ${quoteFilterValue(`|${filter}|`)})`
-      : `(language i== ${quoteFilterValue(filter)} || topics i*= ${quoteFilterValue(`|${filter}|`)})`;
-    const matchingIndices = new Set(
-      this.filterql.query(searchableRepos, query).map(repo => repo.index)
-    );
-
-    return repos.filter((_, index) => matchingIndices.has(index));
+      const matches: unknown = await repoFilter.evaluate(
+        params.repos,
+        { filterValue: params.filter }
+      );
+      if (matches === undefined) {
+        return [];
+      }
+      return Array.isArray(matches)
+        ? matches as DisplayGithubRepo[]
+        : [matches as DisplayGithubRepo];
+    },
   });
 
   constructor(
