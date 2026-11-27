@@ -5,15 +5,15 @@
     </div>
 }
 <div class="repo-list">
-    @for (repo of filteredRepos.value(); track repo.id) {
-        <div tuiCardMedium class="repo">
+    @for (repo of filteredRepos(); track repo.id) {
+        <div tuiCardMedium class="repo" animate.enter="repo-enter" animate.leave="repo-leave">
             <div class="repo-header">
                 <h2 tuiTitle><a [href]="repo.html_url" target=_blank>{{ repo.name }}</a></h2>
                 @if (repo.topics) {
                     <div class="repoTopics">
                         @for (t of repo.topics; track t) {
                             @if (t !== "No Topics Listed") {
-                                <a href="{{ getTagLink(t) }}" target="_self">
+                                <a routerLink="/pages/cs" [queryParams]="{ filter: t.toLowerCase() }">
                                     <div tuiBadge class="repoTopic">{{ t }}</div>
                                 </a>
                             }
@@ -34,7 +34,7 @@
             <span tuiSubtitle>{{ repo.description ?? 'No description' }}</span>
             <div class="repo-footer">
                 @if (repo.language) {
-                    <a href="{{ getTagLink(repo.language) }}" target="_self">
+                    <a routerLink="/pages/cs" [queryParams]="{ filter: repo.language.toLowerCase() }">
                         <div tuiBadge class="repoLang"> Language: {{ repo.language }} </div>
                     </a>
                 }

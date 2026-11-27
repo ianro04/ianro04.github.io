@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, OnInit, resource, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import jsonata from 'jsonata';
 
 import { TuiAppearance, TuiTitle } from '@taiga-ui/core';
 import { TuiBadge } from '@taiga-ui/kit';
@@ -11,22 +10,6 @@ import { TuiCardMedium } from '@taiga-ui/layout';
 import { GithubRepo, GithubService } from '../../services/git-hub/git-hub';
 
 type DisplayGithubRepo = Omit<GithubRepo, 'topics'> & { topics: string[] };
-
-const repoFilter = jsonata(`$filter($, function($repo) {
-  (
-    $lowercase($repo.language ? $repo.language : '') = $filterValue
-    or (
-      $filterValue = 'python'
-      and $lowercase($repo.language ? $repo.language : '') = 'jupyter notebook'
-    )
-  )
-  or $count(
-    $filter(
-      $repo.topics ? $repo.topics : [],
-      function($topic) { $lowercase($topic) = $filterValue }
-    )
-  ) > 0
-})`);
 
 @Component({
   imports: [RouterLink, TuiAppearance, TuiBadge, TuiCardMedium, TuiTitle],
@@ -39,25 +22,19 @@ export class CS implements OnInit {
   repos = signal<DisplayGithubRepo[]>([]);
   private filter = signal<string | null>(null);
   activeFilter = computed(() => this.filter()?.trim().toLowerCase() || null);
-  filteredRepos = resource({
-    params: () => ({ repos: this.repos(), filter: this.activeFilter() }),
-    defaultValue: [] as DisplayGithubRepo[],
-    loader: async ({ params }) => {
-      if (!params.filter) {
-        return params.repos;
-      }
+  filteredRepos = computed(() => {
+    const filter = this.activeFilter();
+    const repos = this.repos();
+    if (!filter) {
+      return repos;
+    }
 
-      const matches: unknown = await repoFilter.evaluate(
-        params.repos,
-        { filterValue: params.filter }
-      );
-      if (matches === undefined) {
-        return [];
-      }
-      return Array.isArray(matches)
-        ? matches as DisplayGithubRepo[]
-        : [matches as DisplayGithubRepo];
-    },
+    return repos.filter(repo => {
+      const language = repo.language?.toLowerCase() ?? '';
+      return language === filter
+        || (filter === 'python' && language === 'jupyter notebook')
+        || repo.topics.some(topic => topic.toLowerCase() === filter);
+    });
   });
 
   constructor(
@@ -106,9 +83,5 @@ export class CS implements OnInit {
       .map(result => result.value);
 
     this.repos.update(current => this.formatRepoList([...current, ...extraRepos]));
-  }
-
-  getTagLink(tag: string): string {
-    return `/pages/cs?filter=${encodeURIComponent(tag.toLowerCase())}`;
   }
 }

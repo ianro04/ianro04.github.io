@@ -105,6 +105,43 @@ describe('CS', () => {
     expect(TestBed.inject(Router).url).toBe('/pages/cs');
   });
 
+  it('should filter projects through a tag link without replacing the page', async () => {
+    const harness = await RouterTestingHarness.create();
+    const routedComponent = await harness.navigateByUrl('/pages/cs', CS);
+    routedComponent.repos.set([
+      {
+        id: 1,
+        name: 'React project',
+        description: null,
+        html_url: 'https://example.com/react',
+        language: 'TypeScript',
+        fork: false,
+        topics: ['react'],
+        pushed_at: '2026-01-01',
+      },
+      {
+        id: 2,
+        name: 'Other project',
+        description: null,
+        html_url: 'https://example.com/other',
+        language: 'JavaScript',
+        fork: false,
+        topics: ['angular'],
+        pushed_at: '2026-01-01',
+      },
+    ]);
+    harness.detectChanges();
+
+    harness.routeNativeElement?.querySelector<HTMLAnchorElement>('.repoTopics a')
+      ?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+
+    expect(TestBed.inject(Router).url).toBe('/pages/cs?filter=react');
+    expect(harness.routeNativeElement?.querySelectorAll('.repo').length).toBe(1);
+    expect(harness.routeNativeElement?.querySelector('.filter-controls')?.textContent).toContain('react');
+  });
+
   it('should filter for specific languages', async () => {
     const harness = await RouterTestingHarness.create();
     const routedComponent = await harness.navigateByUrl('/pages/cs?filter=python', CS);

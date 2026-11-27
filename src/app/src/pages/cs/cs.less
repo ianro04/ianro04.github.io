@@ -119,10 +119,41 @@
     color: #282014;
 }
 
-// Animation
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes repo-enter {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes repo-leave {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+    }
+}
+
+.repo-enter {
+    animation: repo-enter 220ms ease both;
+}
+
+.repo-leave {
+    animation: repo-leave 180ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .repo-enter,
+    .repo-leave {
+        animation-duration: 1ms;
+    }
 }
 
 @media (max-width: 900px) {
