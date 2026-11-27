@@ -95,8 +95,8 @@ export class CS implements OnInit {
         const repo = await firstValueFrom(
           this.GitHub.getSpecificRepo(extraRepo.owner, extraRepo.repo)
         );
-        if (extraRepo.extraTopics) {
-          repo.topics = [...(repo.topics ?? []), ...extraRepo.extraTopics];
+        if (extraRepo.extraTopics?.length) {
+          repo.topics = [...new Set([...(repo.topics ?? []), ...extraRepo.extraTopics])];
         }
         return repo;
       })

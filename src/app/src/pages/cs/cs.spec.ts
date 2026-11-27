@@ -6,10 +6,13 @@ import { provideRouter, Router } from '@angular/router';
 import * as fs from 'fs';
 import * as path from 'path';
 import { of } from 'rxjs';
+import { afterEach, vi } from 'vitest';
 
 describe('CS', () => {
   let component: CS;
   let fixture: ComponentFixture<CS>;
+
+  afterEach(() => vi.restoreAllMocks());
 
   const githubServiceMock = {
     getUserRepos: () => of([]),
@@ -39,6 +42,30 @@ describe('CS', () => {
     const miscPath = path.join(process.cwd(), 'public', 'misc_repos.json');
     const fileExists = fs.existsSync(miscPath);
     expect(fileExists).toBe(true);
+  });
+
+  it('should not duplicate topics when adding extra repository topics', async () => {
+    const githubService = TestBed.inject(GithubService);
+    vi.spyOn(githubService, 'getUserRepos').mockReturnValue(of([]));
+    vi.spyOn(githubService, 'getExtraRepos').mockReturnValue(of([
+      { owner: 'example', repo: 'FauxRepo', extraTopics: ['react', 'mongodb'] },
+    ]));
+    vi.spyOn(githubService, 'getSpecificRepo').mockReturnValue(of({
+      id: 1,
+      name: 'FauxRepo',
+      description: null,
+      html_url: 'https://example.com/project',
+      language: 'JavaScript',
+      fork: false,
+      topics: ['react', 'nodejs'],
+      pushed_at: '2026-01-01',
+    }));
+
+    const harness = await RouterTestingHarness.create();
+    const routedComponent = await harness.navigateByUrl('/pages/cs', CS);
+    await harness.fixture.whenStable();
+
+    expect(routedComponent.repos()[0].topics).toEqual(['react', 'nodejs', 'mongodb']);
   });
 
   it('should filter projects by the query parameter and allow returning to all projects', async () => {
