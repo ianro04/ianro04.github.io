@@ -2,7 +2,12 @@
   <div class="nav-container">
     <a class="nav-logo" routerLink="/">Portfolio: Ian Rodriguez</a>
     <ul class="nav-links">
-      <li><a routerLink="/">Home</a></li>
+      <li>
+        <a class="home-link" routerLink="/" aria-label="Home">
+          <ng-icon class="home-icon-outline" name="fluentHome" size="28" aria-hidden="true"></ng-icon>
+          <ng-icon class="home-icon-filled" name="fluentHomeFilled" size="28" aria-hidden="true"></ng-icon>
+        </a>
+      </li>
       <li><a routerLink="/pages/cv/">CV</a></li>
       <li><a routerLink="/pages/cs/">Software Projects</a></li>
       <li><a routerLink="/pages/nlp/">NLP & Data Science Projects</a></li>

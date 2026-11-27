@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router'
 import { bootstrapGithub, bootstrapLinkedin } from '@ng-icons/bootstrap-icons';
+import { fluentHome } from '@ng-icons/fluent-ui';
+import { fluentHomeFilled } from '@ng-icons/fluent-ui/filled';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { TUI_DARK_MODE } from '@taiga-ui/core';
 import { TuiSwitch, tuiSwitchOptionsProvider } from '@taiga-ui/kit';
@@ -17,7 +19,7 @@ import { TuiSwitch, tuiSwitchOptionsProvider } from '@taiga-ui/kit';
   selector: 'app-navbar',
   styleUrl: './navbar.less',
   templateUrl: './navbar.html',
-  viewProviders: [provideIcons({bootstrapGithub, bootstrapLinkedin})]
+  viewProviders: [provideIcons({bootstrapGithub, bootstrapLinkedin, fluentHome, fluentHomeFilled})]
 })
 export class Navbar {
   protected readonly darkMode = inject(TUI_DARK_MODE);

@@ -48,6 +48,21 @@
         color: @link-hover;
       }
     }
+
+    .home-icon-filled {
+      display: none;
+    }
+
+    .home-link:hover,
+    .home-link:focus-visible {
+      .home-icon-outline {
+        display: none;
+      }
+
+      .home-icon-filled {
+        display: inline;
+      }
+    }
   }
 
   .social-links {

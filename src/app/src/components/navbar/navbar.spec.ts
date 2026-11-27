@@ -35,7 +35,7 @@ describe('Navbar', () => {
     const links = fixture.nativeElement.querySelectorAll('.nav-links a');
 
     expect(Array.from(links, (link: HTMLAnchorElement) => link.textContent?.trim())).toEqual([
-      'Home',
+      '',
       'CV',
       'Software Projects',
       'NLP & Data Science Projects',

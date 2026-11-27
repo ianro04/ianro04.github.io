@@ -23,6 +23,7 @@
     "@angular/ssr": "^22.2.5",
     "@ng-icons/bootstrap-icons": "^36.1.0",
     "@ng-icons/core": "^36.1.0",
+    "@ng-icons/fluent-ui": "^36.1.0",
     "@ngneat/cashew": "^5.3.0",
     "@taiga-ui/cdk": "^5.30.0",
     "@taiga-ui/core": "^5.30.0",
