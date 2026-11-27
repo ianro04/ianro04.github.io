@@ -44,7 +44,9 @@ export class CS implements OnInit {
       language: repo.language ?? '',
       topics: `|${repo.topics.join('|')}|`,
     }));
-    const query = `(language i== ${quoteFilterValue(filter)} || topics i*= ${quoteFilterValue(`|${filter}|`)})`;
+    const query = quoteFilterValue(filter) === '"python"'
+      ? `(language i== ${quoteFilterValue(filter)} || language i== ${quoteFilterValue('jupyter notebook')} || topics i*= ${quoteFilterValue(`|${filter}|`)})`
+      : `(language i== ${quoteFilterValue(filter)} || topics i*= ${quoteFilterValue(`|${filter}|`)})`;
     const matchingIndices = new Set(
       this.filterql.query(searchableRepos, query).map(repo => repo.index)
     );
